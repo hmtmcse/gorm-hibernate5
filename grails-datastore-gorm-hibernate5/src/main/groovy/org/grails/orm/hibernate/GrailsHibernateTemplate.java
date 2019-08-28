@@ -152,6 +152,8 @@ public class GrailsHibernateTemplate implements IHibernateTemplate {
 
             return execute(callable::call);
         }
+
+        // TODO: Every New Session Clear here, I commented this code for Leazy Loading
         finally {
             try {
                 // if an active synchronization was registered during the life time of the new session clear it
