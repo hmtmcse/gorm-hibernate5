@@ -24,9 +24,8 @@ plugins {
 }
 
 
-group "org.grails"
-// version "7.0.0.RELEASE"
-version "7.0.2.BUILD-SNAPSHOT"
+ version "7.0.2.CUSTOM"
+//version "7.0.2.BUILD-SNAPSHOT"
 logger.info("GORM VERSION = ${project.gormVersion}")
 
 ext {
@@ -139,7 +138,7 @@ subprojects { project ->
     }
 
     if(isPluginProject) {
-        group "org.grails.plugins"
+        group "com.hmtmcse.grails.custom"
         version project.rootProject.version - '.RELEASE'
     }
     else {
@@ -245,19 +244,22 @@ subprojects { project ->
         def u = System.getenv("BINTRAY_USER") ?: project.hasProperty("bintrayUser") ? project.bintrayUser : ''
         def p = System.getenv("BINTRAY_KEY") ?: project.hasProperty("bintrayKey") ? project.bintrayKey : ''
 
-        user = u
-        key = p
+        user = "hmtmcse"
+        key = "__MIA_VAI__"
         publications = ['maven']
         publish = true
+        override = true
         dryRun = false
         pkg {
-            if(isGrails3PluginProject) {
-                repo = 'plugins'
-            }
-            else {
-                repo = 'grails-core'
-            }
-            userOrg = 'grails'
+//            if(isGrails3PluginProject) {
+//                repo = 'plugins'
+//            }
+//            else {
+//                repo = 'grails-core'
+//            }
+//            userOrg = 'grails'
+            repo = 'maven'
+            name = 'com.hmtmcse.grails.custom'
             name = projectInfo.projectArtifactId
             desc = projectInfo.projectDescription
             websiteUrl = projectInfo.projectURL
@@ -269,7 +271,7 @@ subprojects { project ->
                 name = project.version
                 gpg {
                     sign = true
-                    passphrase = System.getenv("SIGNING_PASSPHRASE") ?: project.hasProperty("signingPassphrase") ? project.signingPassphrase : ''
+                    passphrase = '__MIA_VAI__'
                 }
                 mavenCentralSync {
                     sync = false

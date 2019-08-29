@@ -153,52 +153,52 @@ public class GrailsHibernateTemplate implements IHibernateTemplate {
             return execute(callable::call);
         }
 
-        // TODO: Every New Session Clear here, I commented this code for Leazy Loading
+        // TODO: Every New Session Clear here, I commented this code for Lazy Loading
         finally {
-            try {
-                // if an active synchronization was registered during the life time of the new session clear it
-                if(TransactionSynchronizationManager.isSynchronizationActive()) {
-                    TransactionSynchronizationManager.clearSynchronization();
-                }
-                // If there is a synchronization active then leave it to the synchronization to close the session
-                if(newSession != null) {
-                    SessionFactoryUtils.closeSession(newSession);
-                }
-
-                // Clear any bound sessions and connections
-                TransactionSynchronizationManager.unbindResource(sessionFactory);
-                ConnectionHolder connectionHolder = (ConnectionHolder) TransactionSynchronizationManager.unbindResourceIfPossible(dataSource);
-                // if there is a connection holder and it holds an open connection close it
-                try {
-                    if(connectionHolder != null && !connectionHolder.getConnection().isClosed()) {
-                        Connection conn = connectionHolder.getConnection();
-                        DataSourceUtils.releaseConnection(conn, dataSource);
-                    }
-                } catch (SQLException e) {
-                    // ignore, connection closed already?
-                    if(LOG.isDebugEnabled()) {
-                        LOG.debug("Could not close opened JDBC connection. Did the application close the connection manually?: " + e.getMessage());
-                    }
-                }
-            }
-            finally {
-                // if there were previously active synchronizations then register those again
-                if(previousActiveSynchronization) {
-                    TransactionSynchronizationManager.initSynchronization();
-                    for (TransactionSynchronization transactionSynchronization : transactionSynchronizations) {
-                        TransactionSynchronizationManager.registerSynchronization(transactionSynchronization);
-                    }
-                }
-
-                // now restore any previous state
-                if(previousHolder != null) {
-                    TransactionSynchronizationManager.bindResource(sessionFactory, previousHolder);
-                    if(previousConnectionHolder != null) {
-                        TransactionSynchronizationManager.bindResource(dataSource, previousConnectionHolder);
-                    }
-                }
-
-            }
+//            try {
+//                // if an active synchronization was registered during the life time of the new session clear it
+//                if(TransactionSynchronizationManager.isSynchronizationActive()) {
+//                    TransactionSynchronizationManager.clearSynchronization();
+//                }
+//                // If there is a synchronization active then leave it to the synchronization to close the session
+//                if(newSession != null) {
+//                    SessionFactoryUtils.closeSession(newSession);
+//                }
+//
+//                // Clear any bound sessions and connections
+//                TransactionSynchronizationManager.unbindResource(sessionFactory);
+//                ConnectionHolder connectionHolder = (ConnectionHolder) TransactionSynchronizationManager.unbindResourceIfPossible(dataSource);
+//                // if there is a connection holder and it holds an open connection close it
+//                try {
+//                    if(connectionHolder != null && !connectionHolder.getConnection().isClosed()) {
+//                        Connection conn = connectionHolder.getConnection();
+//                        DataSourceUtils.releaseConnection(conn, dataSource);
+//                    }
+//                } catch (SQLException e) {
+//                    // ignore, connection closed already?
+//                    if(LOG.isDebugEnabled()) {
+//                        LOG.debug("Could not close opened JDBC connection. Did the application close the connection manually?: " + e.getMessage());
+//                    }
+//                }
+//            }
+//            finally {
+//                // if there were previously active synchronizations then register those again
+//                if(previousActiveSynchronization) {
+//                    TransactionSynchronizationManager.initSynchronization();
+//                    for (TransactionSynchronization transactionSynchronization : transactionSynchronizations) {
+//                        TransactionSynchronizationManager.registerSynchronization(transactionSynchronization);
+//                    }
+//                }
+//
+//                // now restore any previous state
+//                if(previousHolder != null) {
+//                    TransactionSynchronizationManager.bindResource(sessionFactory, previousHolder);
+//                    if(previousConnectionHolder != null) {
+//                        TransactionSynchronizationManager.bindResource(dataSource, previousConnectionHolder);
+//                    }
+//                }
+//
+//            }
         }
     }
 
